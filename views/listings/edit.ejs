@@ -1,0 +1,75 @@
+<% layout("/layouts/boilerplate") %>
+
+    <body>
+        <div class="container mt-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8">
+                    <h3>Edit Your Listing</h3>
+                    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation"
+                        novalidate enctype="multipart/form-data">
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" name="listing[title]" id="title" class="form-control"
+                                value="<%= listing.title %>" placeholder="Enter title" required>
+                            <div class="invalid-feedback">Please enter a title.</div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="listing[description]" id="description" class="form-control"
+                                placeholder="Enter description" rows="4" required><%= listing.description %></textarea>
+                            <div class="invalid-feedback">Please provide a description.</div>
+                        </div>
+
+
+                        <!-- Existing Image Preview -->
+                        <div class="mb-3">
+                            <label class="form-label d-block">Current Image</label>
+                            <% if (listing.image && listing.image.url) { %>
+                                <img src="<%= listing.image.url %>" alt="Current Image"
+                                    class="img-fluid rounded shadow-sm mb-2"
+                                    style="max-height: 250px; object-fit: cover;">
+                                <% } %>
+                        </div>
+
+
+                        <!-- Image URL -->
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Upload New Image</label>
+                            <input type="file" name="listing[image]" id="image" class="form-control">
+                        </div>
+
+                        <!-- Row for Price and Country -->
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-4">
+                                <label for="price" class="form-label">Price (₹ per night)</label>
+                                <input type="number" name="listing[price]" id="price" class="form-control"
+                                    value="<%= listing.price %>" placeholder="Enter price" required min="1">
+                                <div class="invalid-feedback">Please enter a valid price.</div>
+                            </div>
+                            <div class="col-12 col-md-8">
+                                <label for="country" class="form-label">Country</label>
+                                <input type="text" name="listing[country]" id="country" class="form-control"
+                                    value="<%= listing.country %>" placeholder="Enter country" required>
+                                <div class="invalid-feedback">Please enter a country name.</div>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" name="listing[location]" id="location" class="form-control"
+                                value="<%= listing.location %>" placeholder="Enter location" required>
+                            <div class="invalid-feedback">Please enter a location.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark add-btn mt-3">Save Changes</button>
+                    </form>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+    </body>

@@ -1,0 +1,143 @@
+<% layout("/layouts/boilerplate") %>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8">
+
+                <!-- Listing Card -->
+                <div class="card mb-4 listing-card">
+                    <% if (listing.image && listing.image.url) { %>
+                        <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>"
+                            style="object-fit: cover; max-height: 400px;">
+                        <% } %>
+
+                            <div class="card-body">
+                                <h3 class="card-title mb-3">
+                                    <%= listing.title %>
+                                </h3>
+                                <p><i>@<%= listing.owner.username %></i></p>
+
+                                <ul class="list-group list-group-flush mb-3">
+                                    <li class="list-group-item"><strong>Description:</strong>
+                                        <%= listing.description %>
+                                    </li>
+                                    <li class="list-group-item"><strong>Price:</strong> ₹<%=
+                                            listing.price.toLocaleString('en-IN') %> / night</li>
+                                    <li class="list-group-item"><strong>Location:</strong>
+                                        <%= listing.location %>
+                                    </li>
+                                    <li class="list-group-item"><strong>Country:</strong>
+                                        <%= listing.country %>
+                                    </li>
+                                </ul>
+
+                                <% if(currentUser && currentUser._id.equals(listing.owner._id)) { %>
+                                    <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary me-2">Edit this
+                                        listing</a>
+                                    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE"
+                                        class="d-inline">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                    <% } %>
+                            </div>
+                </div>
+
+                <!-- Add Review Form -->
+                <% if(currentUser) { %>
+                    <div class="card mb-4 p-3 listing-card">
+                        <h4>Leave a Review</h4>
+                        <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation"
+                            novalidate>
+
+                            <!-- Star Rating -->
+                            <div class="mb-3">
+                                <label class="form-label d-block mb-2">Rating</label>
+                                <div class="star-rating mb-2">
+                                    <% for(let i=5; i>= 1; i--) { %>
+                                        <input type="radio" id="star<%= i %>" name="review[rating]" value="<%= i %>"
+                                            required>
+                                        <label for="star<%= i %>" title="<%= i %> stars">
+                                            <i class="fa-solid fa-star"></i>
+                                        </label>
+                                        <% } %>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">Comments</label>
+                                <textarea name="review[comment]" id="comment" rows="5" class="form-control"
+                                    required></textarea>
+                                <div class="invalid-feedback">Please submit some comments for review.</div>
+                            </div>
+                            <button class="btn btn-outline-dark">Submit</button>
+                        </form>
+                    </div>
+                    <% } %>
+
+                        <% if(listing.reviews.length> 0){ %>
+                            <p><b>All Reviews</b></p>
+                            <% } %>
+
+                                <div class="row">
+                                    <% for (let review of listing.reviews) { %>
+                                        <div class="card col-md-5 ms-3 mb-3">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@<%= review.author.username %>
+                                                </h5>
+                                                <p class="card-text">
+                                                    <%= review.comment %>
+                                                </p>
+                                                <p class="card-text text-warning">
+                                                    <% for(let i=1; i <=5; i++) { %>
+                                                        <i
+                                                            class="fa-star <%= i <= review.rating ? 'fa-solid' : 'fa-regular' %>"></i>
+                                                        <% } %>
+                                                            (<%= review.rating %>/5)
+                                                </p>
+
+                                                <form class="mb-3" method="POST"
+                                                    action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                                    <button class="btn btn-sm btn-dark">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                </div>
+
+                                <h3>Where you'll be</h3>
+
+                                <!-- Map Container -->
+                                <div id="map"
+                                    style="height: 400px; width: 100%; border-radius: 10px; margin-top: 20px; margin-bottom: 15px;">
+                                </div>
+
+                                <!-- Initialize Google Map -->
+                                <script>
+                                    function initMap() {
+                                        const location = {
+                                            lat: parseFloat("<%= listing.geometry.coordinates[1] %>"),
+                                            lng: parseFloat("<%= listing.geometry.coordinates[0] %>")
+                                        };
+
+                                        const map = new google.maps.Map(document.getElementById("map"), {
+                                            zoom: 20,
+                                            center: location,
+                                        });
+
+                                        new google.maps.Marker({
+                                            position: location,
+                                            map: map,
+                                            title: "<%= listing.title %>"
+                                        });
+                                    }
+                                </script>
+
+                                <!-- Google Maps API Script -->
+                                <script async
+                                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC4hITQluM0w2jhBti5TPfv7nfX9V4WnI&callback=initMap">
+                                    </script>
+
+
+            </div>
+        </div>
+    </div>

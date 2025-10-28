@@ -1,0 +1,227 @@
+body {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1;
+}
+
+.navbar {
+  height: 5rem;
+  background-color: white;
+}
+
+.fa-compass {
+  color: #fe424d;
+  font-size: 2rem;
+}
+
+.nav-link {
+  color: #222222 !important;
+}
+
+/* footer */
+.f-info-links a {
+  text-decoration: none;
+  color: #222222 !important;
+}
+
+.f-info-links a:hover {
+  text-decoration: underline;
+}
+
+.f-info-links,
+.f-info-socials,
+.f-info-brand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.f-info-socials i {
+  font-size: 1.2rem;
+  margin-right: 1rem;
+}
+
+.f-info {
+  height: 8rem;
+  background-color: #ebebeb;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: space-evenly;
+}
+
+/* Cards */
+
+.listing-card {
+  border: none !important;
+  margin-bottom: 2rem;
+}
+
+.card-img-top {
+  border-radius: 1rem !important;
+  width: 100% !important;
+  object-fit: cover !important;
+}
+
+.card-body {
+  padding: 0% !important;
+}
+
+.card-text p {
+  font-weight: 400 !important;
+}
+
+.listing-link {
+  text-decoration: none;
+}
+
+/* Card Effect */
+.card-img-overlay {
+  opacity: 0;
+}
+
+.card-img-overlay:hover {
+  opacity: 0.2;
+  background-color: white;
+}
+
+.add-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+}
+
+/* Hide scrollbar but keep horizontal scroll */
+.d-flex.flex-nowrap.overflow-auto {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.d-flex.flex-nowrap.overflow-auto::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* Optional: add smooth touch feel */
+.d-flex.flex-nowrap.overflow-auto {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+/* Airbnb-style scrollable filter bar */
+.container-fluid .btn {
+  border-color: #e5e5e5;
+  color: #333;
+  background-color: #fff;
+  transition: all 0.2s ease-in-out;
+}
+
+.container-fluid .btn:hover {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.d-flex::-webkit-scrollbar {
+  display: none; /* hide scrollbar */
+}
+
+.d-flex {
+  scrollbar-width: none; /* for Firefox */
+}
+
+.border-bottom {
+  border-color: #eee !important;
+}
+
+/* Airbnb-like toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 22px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ddd;
+  transition: 0.3s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+input:checked + .slider {
+  background-color: #ff385c; /* Airbnb pink */
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.navbar {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Centered search bar styling */
+.search-bar {
+  transition: box-shadow 0.2s ease;
+}
+
+.search-bar:hover {
+  box-shadow: 0 2px 8px white;
+}
+
+.search-bar input::placeholder {
+  color: #717171;
+  font-size: 0.9rem;
+}
+
+.search-bar input:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+/* Search button like Airbnb */
+.search-btn {
+  background-color: #ff385c !important;
+  border: none;
+  width: 36px;
+  height: 36px;
+}
+
+.search-btn:hover {
+  background-color: #e61e4d !important;
+}
+
+.search-btn i {
+  font-size: 0.9rem;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .search-bar {
+    max-width: 260px;
+  }
+}

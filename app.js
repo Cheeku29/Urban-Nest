@@ -97,7 +97,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.render("/listings");
+  res.redirect("/listings");
 });
 
 app.all(/.*/, (req, res, next) => {

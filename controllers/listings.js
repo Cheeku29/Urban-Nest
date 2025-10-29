@@ -19,33 +19,37 @@ async function getCoordinates(location, country) {
   }
 }
 
+// Show all listings
 module.exports.index = async (req, res) => {
   const allListings = await Listing.find({});
-  res.render("./listings/index.ejs", { allListings });
+  res.render("listings/index", { allListings });
 };
 
+// Render new listing form
 module.exports.renderNewForm = (req, res) => {
-  res.render("./listings/new.ejs");
+  res.render("listings/new");
 };
 
+// Show a specific listing
 module.exports.showListing = async (req, res) => {
-  let { id } = req.params;
+  const { id } = req.params;
   const listing = await Listing.findById(id)
     .populate({
       path: "reviews",
-      populate: {
-        path: "author",
-      },
+      populate: { path: "author" },
     })
     .populate("owner");
+
   if (!listing) {
     req.flash("error", "Listing does not exist.");
-    res.redirect("/listings");
+    return res.redirect("/listings");
   }
-  res.render("./listings/show.ejs", { listing });
+
+  res.render("listings/show", { listing });
 };
 
-module.exports.createListing = async (req, res, next) => {
+// Create a new listing
+module.exports.createListing = async (req, res) => {
   const coords = await getCoordinates(
     req.body.listing.location,
     req.body.listing.country
@@ -65,31 +69,32 @@ module.exports.createListing = async (req, res, next) => {
   res.redirect("/listings");
 };
 
+// Render edit form
 module.exports.renderEditForm = async (req, res) => {
-  let { id } = req.params;
-  const listing = await Listing.findById(id);
-  if (!listing) {
-    req.flash("error", "Listing does not exist.");
-    res.redirect("/listings");
-  }
-  let originalImg = listing.image.url;
-  originalImg = originalImg.replace("/upload", "/upload/w_250");
-
-  res.render("./listings/edit.ejs", { listing, originalImg });
-};
-
-((module.exports.updateListing = async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
+
+  if (!listing) {
+    req.flash("error", "Listing does not exist.");
+    return res.redirect("/listings");
+  }
+
+  let originalImg = listing.image.url.replace("/upload", "/upload/w_250");
+  res.render("listings/edit", { listing, originalImg });
+};
+
+// Update listing
+module.exports.updateListing = async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+
   if (!listing) {
     req.flash("error", "Listing not found!");
     return res.redirect("/listings");
   }
 
-  // update basic info
   Object.assign(listing, req.body.listing);
 
-  // update geometry only if location/country changed
   if (listing.isModified("location") || listing.isModified("country")) {
     listing.geometry = {
       type: "Point",
@@ -97,7 +102,6 @@ module.exports.renderEditForm = async (req, res) => {
     };
   }
 
-  // update image if a new one is uploaded
   if (req.file) {
     listing.image = { url: req.file.path, filename: req.file.filename };
   }
@@ -105,11 +109,12 @@ module.exports.renderEditForm = async (req, res) => {
   await listing.save();
   req.flash("success", "Listing Updated Successfully!");
   res.redirect(`/listings/${id}`);
-}),
-  (module.exports.destroyListing = async (req, res) => {
-    let { id } = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-    req.flash("success", "Listing Deleted!");
-    res.redirect(`/listings`);
-  }));
+};
+
+// Delete listing
+module.exports.destroyListing = async (req, res) => {
+  const { id } = req.params;
+  await Listing.findByIdAndDelete(id);
+  req.flash("success", "Listing Deleted!");
+  res.redirect("/listings");
+};
